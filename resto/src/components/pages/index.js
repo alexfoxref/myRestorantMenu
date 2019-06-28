@@ -28,8 +28,12 @@ const routerItems = routerConfig.map(item => {
 
 const matchPath = routerConfig.filter((item) => {
     const {path} = item;
-    return (path === window.location.pathname)
+    const location = window.location.pathname;
+    const browserPath = (location[location.length-1] === '/') ? location : `${location}/`;
+    return (path === browserPath)
 }).map(item => item.path);
+
+console.log(matchPath.length)
 
 const noMatchPage = (matchPath.length !== 0) ? null : NoMatchPage;
 
