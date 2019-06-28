@@ -33,8 +33,6 @@ const matchPath = routerConfig.filter((item) => {
     return (path === browserPath)
 }).map(item => item.path);
 
-console.log(matchPath.length)
-
 const noMatchPage = (matchPath.length !== 0) ? null : NoMatchPage;
 
 const Pages = () => {
