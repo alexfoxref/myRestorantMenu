@@ -1,9 +1,24 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
+import FoodItem from './food-item-page';
 
 import MainPage from './main-page';
 import CartPage from './cart-page';
 import NoMatchPage from './no-match-page';
+
+
+const foodItem = (id) => {
+    return (
+        <FoodItem 
+            selectedItem={id}/>
+    )
+};
+
+const dynamicItem = (match) => {
+    const {id} = match.params;
+
+    return foodItem(id)
+};
 
 const routerConfig = [
     {
@@ -15,6 +30,11 @@ const routerConfig = [
         path: '/cart/',
         component: CartPage,
         exact: true
+    },
+    {
+        path: '/:id',
+        component: ({match}) => dynamicItem(match),
+        exect: false
     }
 ];
 
@@ -49,5 +69,6 @@ export default Pages;
 export {
     MainPage,
     CartPage,
-    NoMatchPage
+    NoMatchPage,
+    FoodItem
 };

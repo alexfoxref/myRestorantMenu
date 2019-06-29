@@ -5,6 +5,8 @@ import WithRestoService from '../hoc/';
 import {menuLoaded, menuRequested, menuError} from '../../actions';
 import Spinner from '../spinner';
 import Error from '../error';
+import {withRouter} from 'react-router-dom';
+
 
 
 import './menu-list.scss';
@@ -21,43 +23,50 @@ class MenuList extends Component {
             .catch(err => menuError(err));
     }
 
-    render() {
-        const {menuItems, loading, errorMessage} = this.props;
+    categories = [];
+    categoryImgs = [];
+    categoryImg = '';
 
-        if (loading) {
-            return <Spinner />
+    getCategoryImg = (menuItem = {}) => {
+        const {category, url} = menuItem;
+        const index = this.categories.indexOf(category);
+
+        if (index === -1) {
+            this.categories.push(category);
+            this.categoryImg = url;
+            this.categoryImgs.push(this.categoryImg);
+        } else {
+            this.categoryImg = this.categoryImgs[index];
         }
-        
-        if (errorMessage) {
-            return <Error errorMessage={errorMessage} />
-        }
+        return this.categoryImg;
+    }
 
-        let categories = [],
-            categoryImgs = [];
-
+    menuList = () => {
+        const {menuItems} = this.props;
         return (
             <ul className="menu__list">
                 {
                     menuItems.map(menuItem => {
-
-                        // будем ставить иконку на карточке по картинке первого встречного блюда из этой категории
-                        const {id, category, url} = menuItem;
-                        let categoryImg = '';
-                        const index = categories.indexOf(category);
-
-                        if (index === -1) {
-                            categories.push(category);
-                            categoryImg = url;
-                            categoryImgs.push(categoryImg);
-                        } else {
-                            categoryImg = categoryImgs[index];
-                        }
-
-                        return <MenuListItem key={id} categoryImg={categoryImg} menuItem={menuItem}/>
+                        return  <MenuListItem 
+                                    key={menuItem.id}  
+                                    categoryImg={this.getCategoryImg(menuItem)} 
+                                    menuItem={menuItem}
+                                    onItemSelected={(itemId) => {
+                                        this.props.history.push(`/${itemId}`)
+                                    }}/>
                     })
                 }
             </ul>
         )
+    }
+
+    render() {
+        const {loading, errorMessage} = this.props;
+
+        return  <View
+                    success={this.menuList}
+                    loading={loading}
+                    error={errorMessage} />
     }
 };
 
@@ -78,4 +87,19 @@ const mapDispatchToProps = {
     menuError
 };
 
-export default WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(MenuList));
+export default withRouter(WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(MenuList)));
+
+
+
+const View = ({success, loading, error}) => {
+
+        if (loading) {
+            return <Spinner />
+        }
+        
+        if (error) {
+            return <Error errorMessage={error} />
+        }
+
+        return success()
+}
