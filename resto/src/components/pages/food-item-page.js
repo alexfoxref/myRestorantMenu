@@ -6,6 +6,7 @@ import Spinner from '../spinner';
 import Error from '../error';
 
 import './food-item-page.scss';
+import { NoMatchPage } from './';
 
 
 class FoodItem extends Component {
@@ -22,6 +23,7 @@ class FoodItem extends Component {
 
     render() {
         const {menuItems, loading, errorMessage, selectedItem} = this.props;
+         
         let title = '', 
             price = '', 
             url = '', 
@@ -29,10 +31,14 @@ class FoodItem extends Component {
             description = 'Vivamus accumsan quis risus rhoncus finibus. Fusce condimentum tincidunt mollis. Ut eu nulla gravida tortor volutpat fringilla. Morbi et consectetur nulla, sed venenatis lectus. Nullam non eleifend neque, ut vehicula elit. Nulla faucibus mauris justo, in congue quam pulvinar a. Cras a ultrices nunc. Vestibulum at velit tincidunt, vehicula nisl et, mattis sem.';
         
         if (menuItems.length > 0) {
-            title = menuItems[selectedItem-1].title;
-            price = menuItems[selectedItem-1].price;
-            category = menuItems[selectedItem-1].category;
-            url = menuItems[selectedItem-1].url;
+            if (typeof +selectedItem === 'number' && selectedItem > 0 && selectedItem <= menuItems.length && +selectedItem === Math.floor(+selectedItem)) {
+                title = menuItems[selectedItem-1].title;
+                price = menuItems[selectedItem-1].price;
+                category = menuItems[selectedItem-1].category;
+                url = menuItems[selectedItem-1].url;
+            } else {
+                return <NoMatchPage />
+            }
         }
 
         if (loading) {

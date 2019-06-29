@@ -34,7 +34,7 @@ const routerConfig = [
     {
         path: '/:id',
         component: ({match}) => dynamicItem(match),
-        exect: false
+        exect: true
     }
 ];
 
