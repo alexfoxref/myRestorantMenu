@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import MenuListItem from '../menu-list-item';
 import {connect} from 'react-redux';
 import WithRestoService from '../hoc/';
-import {menuLoaded, menuRequested, menuError} from '../../actions';
+import {menuLoaded, menuRequested, menuError, addedToCart} from '../../actions';
 import Spinner from '../spinner';
 import Error from '../error';
 import {withRouter} from 'react-router-dom';
@@ -42,12 +42,13 @@ class MenuList extends Component {
     }
 
     menuList = () => {
-        const {menuItems} = this.props;
+        const {menuItems, addedToCart} = this.props;
         return (
             <ul className="menu__list">
                 {
                     menuItems.map(menuItem => {
                         return  <MenuListItem 
+                                    onAddToCart={() => addedToCart(menuItem.id)}
                                     key={menuItem.id}  
                                     categoryImg={this.getCategoryImg(menuItem)} 
                                     menuItem={menuItem}
@@ -84,7 +85,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     menuLoaded,
     menuRequested,
-    menuError
+    menuError,
+    addedToCart
 };
 
 export default withRouter(WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(MenuList)));

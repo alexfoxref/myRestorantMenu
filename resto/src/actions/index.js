@@ -17,3 +17,31 @@ export const menuError = (err) => {
         errorMessage: err.message
     }
 }
+
+export const addedToCart = (id) => {
+    return {
+        type: 'ITEM_ADD_TO_CART',
+        payload: id
+    }
+}
+
+export const deleteFromCart = (id) => {
+    return {
+        type: 'ITEM_REMOVE_FROM_CART',
+        payload: id
+    }
+}
+
+export const minusCount = (id) => {
+    return {
+        type: 'MINUS_NUMBER',
+        payload: id
+    }
+}
+
+export const plusCount = (id) => {
+    return {
+        type: 'PLUS_NUMBER',
+        payload: id
+    }
+}

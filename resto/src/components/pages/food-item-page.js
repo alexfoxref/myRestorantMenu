@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import WithRestoService from '../hoc/';
-import {menuLoaded, menuRequested, menuError} from '../../actions';
+import {menuLoaded, menuRequested, menuError, addedToCart} from '../../actions';
 import Spinner from '../spinner';
 import Error from '../error';
 
@@ -22,7 +22,8 @@ class FoodItem extends Component {
     }
 
     render() {
-        const {menuItems, loading, errorMessage, selectedItem} = this.props;
+        const {menuItems, loading, errorMessage, selectedItem, addedToCart} = this.props;
+        
          
         let title = '', 
             price = '', 
@@ -32,10 +33,10 @@ class FoodItem extends Component {
         
         if (menuItems.length > 0) {
             if (typeof +selectedItem === 'number' && selectedItem > 0 && selectedItem <= menuItems.length && +selectedItem === Math.floor(+selectedItem)) {
-                title = menuItems[selectedItem-1].title;
-                price = menuItems[selectedItem-1].price;
-                category = menuItems[selectedItem-1].category;
-                url = menuItems[selectedItem-1].url;
+                title = menuItems[+selectedItem-1].title;
+                price = menuItems[+selectedItem-1].price;
+                category = menuItems[+selectedItem-1].category;
+                url = menuItems[+selectedItem-1].url;
             } else {
                 return <NoMatchPage />
             }
@@ -59,7 +60,11 @@ class FoodItem extends Component {
                     </div>
                     <div className="menu__price">Price: <span>{price}$</span></div>
                     <div className="menu__description">Description:<span>{description}</span></div>
-                    <button className="menu__btn">Add to cart</button>
+                    <button 
+                        onClick={() => {addedToCart(+selectedItem)}}
+                        className="menu__btn">
+                            Add to cart
+                    </button>
                 </div>
             </div>
         )
@@ -80,7 +85,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     menuLoaded,
     menuRequested,
-    menuError
+    menuError,
+    addedToCart
 };
 
 export default WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(FoodItem));

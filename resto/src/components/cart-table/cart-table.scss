@@ -9,7 +9,7 @@
         font-weight: 300;
     }
     &__list {
-        width: 60%;
+        width: 80%;
         margin: 0 auto;
     }
     &__item {
@@ -21,16 +21,45 @@
         border: 1px solid rgba(256,256,256, .2);
         background-color: rgba(0,0,0,.7);
         box-shadow: 0 0 20px rgba(256,256,256, .1);
-        &-title, &-price  {
-            width: 250px;
+        &-title, &-price, &-counter, &-total  {
+            min-width: 120px;
             text-align: center;
             color: #fff;
             font-size: 24px;
+        }
+        &-title {
+            min-width: 200px;
         }
         &-img {
             height: 125px;
             width: 250px;
             object-fit: cover;
+        }
+        &-counter {
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        &-btn {
+            box-sizing: border-box;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            & span {
+                font-size: 24px;
+                margin-top: -7px;
+            }
+            &:focus {
+                outline: none;
+            }
+            &:active {
+                border: 2px solid white;
+            }
         }
     }
     &__close {
