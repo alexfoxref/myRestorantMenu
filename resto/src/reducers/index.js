@@ -3,35 +3,34 @@ const initialState = {
     loading: true,
     errorMessage: null,
     items: [],
-    total: 0
-}
+    total: 0,
+    modal: false,
+    message: ''
+};
 
 const reducer = (state = initialState, action) => {
     const {type, payload, errorMessage} = action;
-    const {menu} = state;
 
     switch (type) {
         case 'MENU_LOADED':
             return {
                 ...state,
                 menu: payload,
-                loading: false,
+                loading: false
             };
         case 'MENU_REQUESTED':
             return {
                 ...state,
-                menu,
-                loading: true,
+                loading: payload,
             };
         case 'MENU_ERROR':
             return {
                 ...state,
-                menu,
                 loading: false,
                 errorMessage
             };
         case 'ITEM_ADD_TO_CART':
-            const id = action.payload;
+            const id = payload;
             const item = state.menu.find(item => item.id === id);
             const newItem = {
                 title: item.title,
@@ -50,7 +49,8 @@ const reducer = (state = initialState, action) => {
                         ...state.items,
                         newItem
                     ],
-                    total: newTotal
+                    total: newTotal,
+
                 }
             } else {
                 newItem.number = state.items[countIndex].number + 1;
@@ -61,11 +61,12 @@ const reducer = (state = initialState, action) => {
                         newItem,
                         ...state.items.slice(countIndex + 1)
                     ],
-                    total: newTotal
+                    total: newTotal,
+
                 }
             }
         case 'ITEM_REMOVE_FROM_CART':
-            const idx = action.payload;
+            const idx = payload;
             const itemIndex = state.items.findIndex(item => item.id === idx);
             const newTotalDel = state.total - (state.items[itemIndex].price * state.items[itemIndex].number);
 
@@ -75,10 +76,11 @@ const reducer = (state = initialState, action) => {
                     ...state.items.slice(0, itemIndex),
                     ...state.items.slice(itemIndex + 1)
                 ],
-                total: newTotalDel
+                total: newTotalDel,
+
             }
         case 'MINUS_NUMBER':
-            const idm = action.payload;
+            const idm = payload;
             const itemIndexMinus = state.items.findIndex(item => item.id === idm);
             const itemMinus = state.items.find(item => item.id === idm);
             const newItemMinus = {
@@ -100,7 +102,7 @@ const reducer = (state = initialState, action) => {
                 total: newTotalMinus
             }
         case 'PLUS_NUMBER':
-            const idp = action.payload;
+            const idp = payload;
             const itemIndexPlus = state.items.findIndex(item => item.id === idp);
             const itemPlus = state.items.find(item => item.id === idp);
             const newItemPlus = {
@@ -120,6 +122,19 @@ const reducer = (state = initialState, action) => {
                     ...state.items.slice(itemIndexPlus + 1)
                 ],
                 total: newTotalPlus
+            }
+        case 'SEND_ORDER':
+            return {
+                ...state,
+                items: [],
+                total: 0
+            }
+        case 'TOGGLE_MODAL':
+            const message = action.message;
+            return {
+                ...state,
+                modal: !state.modal,
+                message
             }
         default:
             return state;

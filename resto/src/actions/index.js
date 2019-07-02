@@ -5,16 +5,18 @@ export const menuLoaded = (newMenu) => {
     }
 }
 
-export const menuRequested = () => {
+export const menuRequested = (bool) => {
     return {
-        type: 'MENU_REQUESTED'
+        type: 'MENU_REQUESTED',
+        payload: bool
     }
 }
 
 export const menuError = (err) => {
+    const num = `${err}`.replace(/[^(\d\d\d)]/g, '');
     return {
         type: 'MENU_ERROR',
-        errorMessage: err.message
+        errorMessage: num
     }
 }
 
@@ -43,5 +45,43 @@ export const plusCount = (id) => {
     return {
         type: 'PLUS_NUMBER',
         payload: id
+    }
+}
+
+export const sendOrder = () => {
+    return {
+        type: 'SEND_ORDER'
+    }
+}
+
+export const toggleModal = (message) => {
+    return {
+        type: 'TOGGLE_MODAL',
+        message
+    }
+}
+
+export const postData = (url, data) => {
+    const _apiBase = 'http://localhost:3000';
+
+    return (dispatch) => {
+        dispatch(menuRequested(true));
+
+        fetch(`${_apiBase}${url}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Could not fetch ${url}, received ${res.status}`)
+                }
+                dispatch(menuRequested(false));
+                dispatch(sendOrder());
+                dispatch(toggleModal('Your order was successfully sent!'));
+            })
+            .catch(err => dispatch(menuError(err)));
     }
 }

@@ -22,7 +22,7 @@ const Error = ({errorMessage}) => {
     }
 
     return  <div 
-                style={{width: '100vw', height: '100vh', color: 'red', background: `url(${Background}) center center/cover no-repeat`}} 
+                style={{width: '100%', height: '100%', color: 'red', background: `url(${Background}) center center/cover no-repeat`, position:'absolute', top:'60px'}} 
                 className="error">
                     {mess}
             </div>

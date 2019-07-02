@@ -16,7 +16,7 @@ class MenuList extends Component {
     componentDidMount() {
         const {RestoService, menuLoaded, menuRequested, menuError} = this.props;
 
-        menuRequested();
+        menuRequested(true);
 
         RestoService.getMenuItems()
             .then(res => menuLoaded(res))
@@ -93,7 +93,7 @@ export default withRouter(WithRestoService()(connect(mapStateToProps, mapDispatc
 
 
 
-const View = ({success, loading, error}) => {
+export const View = ({success, loading, error}) => {
 
         if (loading) {
             return <Spinner />

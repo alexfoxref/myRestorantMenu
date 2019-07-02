@@ -3,6 +3,7 @@ import cartIcon from './shopping-cart-solid.svg';
 import './app-header.scss';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {menuError} from '../../actions';
 
 const AppHeader = ({total}) => {
     return (
@@ -22,6 +23,8 @@ const mapStateToProps = ({total}) => {
     return {
         total
     }
-}
+};
 
-export default connect(mapStateToProps)(AppHeader);
+const mapDispatchToProps = ({menuError});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);
